@@ -1,3 +1,4 @@
+import React, { useCallback } from 'react';
 import formatPrice from 'utils/formatPrice';
 import { ICartProduct } from 'models';
 
@@ -8,7 +9,8 @@ import * as S from './style';
 interface IProps {
   product: ICartProduct;
 }
-const CartProduct = ({ product }: IProps) => {
+
+const CartProduct = React.memo(({ product }: IProps) => {
   const { removeProduct, increaseProductQuantity, decreaseProductQuantity } =
     useCart();
   const {
@@ -22,9 +24,9 @@ const CartProduct = ({ product }: IProps) => {
     quantity,
   } = product;
 
-  const handleRemoveProduct = () => removeProduct(product);
-  const handleIncreaseProductQuantity = () => increaseProductQuantity(product);
-  const handleDecreaseProductQuantity = () => decreaseProductQuantity(product);
+  const handleRemoveProduct = useCallback(() => removeProduct(product), [product, removeProduct]);
+  const handleIncreaseProductQuantity = useCallback(() => increaseProductQuantity(product), [product, increaseProductQuantity]);
+  const handleDecreaseProductQuantity = useCallback(() => decreaseProductQuantity(product), [product, decreaseProductQuantity]);
 
   return (
     <S.Container>
@@ -59,6 +61,8 @@ const CartProduct = ({ product }: IProps) => {
       </S.Price>
     </S.Container>
   );
-};
+});
+
+CartProduct.displayName = 'CartProduct';
 
 export default CartProduct;

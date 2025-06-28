@@ -1,3 +1,4 @@
+import React from 'react';
 import { IProduct } from 'models';
 import Product from './Product';
 
@@ -7,7 +8,7 @@ interface IProps {
   products: IProduct[];
 }
 
-const Products = ({ products }: IProps) => {
+const Products = React.memo(({ products }: IProps) => {
   return (
     <S.Container>
       {products?.map((p) => (
@@ -15,6 +16,8 @@ const Products = ({ products }: IProps) => {
       ))}
     </S.Container>
   );
-};
+});
+
+Products.displayName = 'Products';
 
 export default Products;

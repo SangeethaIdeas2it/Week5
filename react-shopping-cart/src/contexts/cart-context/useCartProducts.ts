@@ -12,10 +12,10 @@ const useCartProducts = () => {
     quantity: number
   ): ICartProduct => {
     if (currentProduct.id === targetProduct.id) {
-      return Object.assign({
+      return {
         ...currentProduct,
         quantity: currentProduct.quantity + quantity,
-      });
+      };
     } else {
       return currentProduct;
     }
