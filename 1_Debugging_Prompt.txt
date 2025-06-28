@@ -1,0 +1,13 @@
+
+Step1:
+Help me identify: 1. State mutation issues 2. Props mutation problems 3. Performance optimization opportunities 4. Proper immutable update patterns
+
+Step2:
+Help me optimize by: 1. Identifying performance bottlenecks 2. Implementing proper memoization
+3. Optimizing filtering logic 4. Adding performance monitoring
+
+Step3:
+Provide: 1. Comprehensive try-catch blocks 2. Network error handling 3. HTTP status code validation 4. User-friendly error messages 5. Retry mechanisms for failed requests 6. Loading states management Include production-ready error handling patterns.
+
+Step4:
+Identify and fix: 1. XSS vulnerabilities 2. Unsafe HTML rendering 3. Input validation issues 4. URL/navigation security 5. Image source validation
