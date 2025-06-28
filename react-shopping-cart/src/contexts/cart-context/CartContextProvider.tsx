@@ -12,7 +12,6 @@ export interface ICartContext {
   isOpen: boolean;
   products: ICartProduct[];
   total: ICartTotal;
-  isLoading: boolean;
   error: CartError | null;
   
   // Actions
@@ -47,7 +46,6 @@ const CartProvider: FC = (props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [products, setProducts] = useState<ICartProduct[]>([]);
   const [total, setTotal] = useState<ICartTotal>(totalInitialValues);
-  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<CartError | null>(null);
 
   const clearError = useCallback(() => {
@@ -65,7 +63,6 @@ const CartProvider: FC = (props) => {
     isOpen,
     products,
     total,
-    isLoading,
     error,
     setIsOpen,
     setProducts,

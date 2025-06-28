@@ -7,42 +7,38 @@ import { getProducts } from 'services/products';
 const useProducts = () => {
   const {
     isFetching,
-    setIsFetching,
     products,
     setProducts,
     filters,
     setFilters,
   } = useProductsContext();
 
-  const fetchProducts = useCallback(() => {
-    setIsFetching(true);
-    getProducts().then((products: IProduct[]) => {
-      setIsFetching(false);
-      setProducts(products);
-    });
-  }, [setIsFetching, setProducts]);
+  const fetchProducts = useCallback(async () => {
+    const response = await getProducts();
+    if (response.data) {
+      setProducts(response.data);
+    }
+  }, [setProducts]);
 
-  const filterProducts = (filters: string[]) => {
-    setIsFetching(true);
-
-    getProducts().then((products: IProduct[]) => {
-      setIsFetching(false);
-      let filteredProducts;
+  const filterProducts = useCallback(async (filters: string[]) => {
+    const response = await getProducts();
+    if (response.data) {
+      let filteredProducts: IProduct[];
 
       if (filters && filters.length > 0) {
-        filteredProducts = products.filter((p: IProduct) =>
+        filteredProducts = response.data.filter((p: IProduct) =>
           filters.find((filter: string) =>
             p.availableSizes.find((size: string) => size === filter)
           )
         );
       } else {
-        filteredProducts = products;
+        filteredProducts = response.data;
       }
 
       setFilters(filters);
       setProducts(filteredProducts);
-    });
-  };
+    }
+  }, [setProducts, setFilters]);
 
   return {
     isFetching,

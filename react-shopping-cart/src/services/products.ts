@@ -1,5 +1,6 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { IGetProductsResponse, IProduct } from 'models';
+import { sanitizeProductData, validateUrl } from 'utils/security';
 
 // Error types
 export interface ApiError {
@@ -107,18 +108,27 @@ const retryRequest = async <T>(
   throw lastError!;
 };
 
-// Enhanced axios instance
+// Enhanced axios instance with security headers
 const apiClient = axios.create({
   baseURL: API_CONFIG.baseURL,
   timeout: API_CONFIG.timeout,
   headers: {
     'Content-Type': 'application/json',
+    'X-Content-Type-Options': 'nosniff',
+    'X-Frame-Options': 'DENY',
+    'X-XSS-Protection': '1; mode=block',
   },
 });
 
-// Request interceptor for logging
+// Request interceptor for logging and validation
 apiClient.interceptors.request.use(
   (config) => {
+    // Validate URL to prevent open redirects
+    if (config.url && !validateUrl(config.url, ['react-shopping-cart-67954.firebaseio.com'])) {
+      const error = new Error('Invalid URL detected');
+      return Promise.reject(error);
+    }
+    
     console.log(`Making request to: ${config.url}`);
     return config;
   },
@@ -167,8 +177,13 @@ export const getProducts = async (): Promise<ServiceResponse<IProduct[]>> => {
       throw new Error('Invalid products data received from server');
     }
 
+    // Sanitize all product data to prevent injection attacks
+    const sanitizedProducts = products
+      .map(product => sanitizeProductData(product))
+      .filter(Boolean) as IProduct[];
+
     return {
-      data: products,
+      data: sanitizedProducts,
       error: null,
       loading: false,
     };
